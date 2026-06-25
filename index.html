@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>外卖效率助手 v1.1 最终版</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="app-title">🚴 外卖效率助手 v1.1</div>
+        <div class="app-subtitle">多订单 + 省电等待点 + 地图筛选 + 最佳等餐点</div>
+      </div>
+      <div class="badge">本地保存</div>
+    </header>
+
+    <main class="content">
+      <section id="tab-today" class="tab active">
+        <div class="card">
+          <div class="card-title">今天</div>
+          <div class="action-grid">
+            <button class="btn success" id="startShiftBtn">开始工作</button>
+            <button class="btn danger" id="endShiftBtn">结束工作</button>
+            <button class="btn primary" id="newOrderBtn">新增订单</button>
+            <button class="btn ghost" id="waitModeBtn">等待模式：标准</button>
+          </div>
+          <div class="status" id="status">状态：未开始</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">进行中订单</div>
+          <div id="activeOrders"></div>
+          <div class="hint">可同时挂多张单；每张单独记录已取餐 / 完成 / 取消。</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">今日概览</div>
+          <div class="stats-grid">
+            <div class="stat"><div class="label">收入</div><div class="value" id="todayIncome">€0.00</div></div>
+            <div class="stat"><div class="label">订单</div><div class="value" id="todayOrders">0</div></div>
+            <div class="stat"><div class="label">工作时长</div><div class="value" id="todayWorkTime">0m</div></div>
+            <div class="stat"><div class="label">€/小时</div><div class="value" id="todayHourly">€0.00</div></div>
+          </div>
+          <div class="summary-row" id="todayDistance">总距离：0.00 km</div>
+          <div class="summary-row" id="todayWaitTime">等待记录：0 点</div>
+        </div>
+      </section>
+
+      <section id="tab-map" class="tab">
+        <div class="card">
+          <div class="card-title">地图筛选</div>
+          <div class="filter-grid">
+            <button class="filter-btn active" data-filter="wait">等待点</button>
+            <button class="filter-btn" data-filter="accept">接单点</button>
+            <button class="filter-btn" data-filter="pickup">取餐点</button>
+            <button class="filter-btn active" data-filter="dropoff">送餐点</button>
+            <button class="filter-btn active" data-filter="route">路线</button>
+          </div>
+          <div class="range-grid">
+            <button class="range-btn active" data-range="today">今天</button>
+            <button class="range-btn" data-range="7d">最近7天</button>
+            <button class="range-btn" data-range="all">全部</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">地图</div>
+          <div id="map"></div>
+          <div class="hint">蓝色：接单/等待点　绿色：取餐点　红色：送达点</div>
+        </div>
+      </section>
+
+      <section id="tab-analysis" class="tab">
+        <div class="card">
+          <div class="card-title">平台分析</div>
+          <div id="platformStats" class="analysis-block"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">时段分析</div>
+          <div id="timeStats" class="analysis-block"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">最佳等餐点分析</div>
+          <div id="spotStats" class="analysis-block"></div>
+          <div class="hint">基于等待点 + 从附近接到的订单 + 收入/距离/时段综合评分。</div>
+        </div>
+      </section>
+
+      <section id="tab-history" class="tab">
+        <div class="card">
+          <div class="card-title">历史订单</div>
+          <div id="historyList"></div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-tab="today">今日</button>
+      <button class="nav-btn" data-tab="map">地图</button>
+      <button class="nav-btn" data-tab="analysis">分析</button>
+      <button class="nav-btn" data-tab="history">历史</button>
+    </nav>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="storage.js"></script>
+  <script src="analytics.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
